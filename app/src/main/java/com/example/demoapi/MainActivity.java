@@ -2,29 +2,33 @@ package com.example.demoapi;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.VoiceInteractor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.service.voice.VoiceInteractionSession;
+import android.util.Log;
 import android.view.View;
+import android.view.textclassifier.TextLinks;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     private TextView mText;
     private EditText mEdit;
     private Button mButton;
-
+    private RequestQueue mQueue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,45 +37,41 @@ public class MainActivity extends AppCompatActivity {
         mEdit = findViewById(R.id.editT);
         mButton = findViewById(R.id.BttonS);
 
+        mQueue= Volley.newRequestQueue(this);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                new GetURL().execute("http://"+mEdit.getText().toString().trim()) ;}
+            public void onClick(View v) {
+                jsonParse();
+            }
         });
-
-    }
-    class  GetURL extends AsyncTask<String,String,String>{
-        OkHttpClient OkHttpClient = new  OkHttpClient.Builder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .writeTimeout(10,TimeUnit.SECONDS)
-                .readTimeout(15,TimeUnit.SECONDS)
-                .retryOnConnectionFailure(true)
-                .build();
-
-        @Override
-        protected String doInBackground(String... strings) {
-            Request.Builder builder=new Request.Builder();
-            builder.url(strings[0]);
-            Request request=builder.build();
-            try {
-                 Response  response= OkHttpClient.newCall(request).execute();
-                return response.body().string();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
         }
+    private void jsonParse() {
+        String url = "http://172.36.68.21:9200/medicalsearch?key_search="+mEdit;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray("response");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject employee = jsonArray.getJSONObject(i);
+                                String firstName = employee.getString("description");
+                                String age = employee.getString("post_url");
+                                String mail = employee.getString("title");
+                                String mail1 = employee.getString("web_url");
 
-        @Override
-        protected void onPostExecute(String s) {
-            if(!s.equals(" "))
-            {
-                mText.append(s);
+                                mText.append(firstName + ", " + age + ", " + mail +","+mail1+ "\n\n");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
             }
-            else {
-            }
-            super.onPostExecute(s);
-        }
+        });
+        mQueue.add(request);
     }
-
-}
+    }
