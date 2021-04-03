@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //anh xa
 //        mText = findViewById(R.id.textV);
         mEdit = findViewById(R.id.editT);
         mButton = findViewById(R.id.BttonS);
@@ -53,9 +54,10 @@ public class MainActivity extends AppCompatActivity {
         });
         }
     private void jsonParse() {
+        //GET du lieu Json tu 1 link
         String url = "http://172.36.68.21:9200/medicalsearch?key_search="+mEdit;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+                new Response.Listener<JSONObject>() {//ket qua tra ve
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                                // mText.append(firstName + ", " + age + ", " + mail +","+mail1+ "\n\n");
                                 mListView.add(new Model(description,post_url,title,web_url));
                             }
+                            //ve len adapter
                             mAdapter =new ViewAdapter(mListView);
                             mList.setAdapter(mAdapter);
                         } catch (JSONException e) {
@@ -84,6 +87,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         mQueue.add(request);
-        //ve len adapter
-    }
+        }
     }
