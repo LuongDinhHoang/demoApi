@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.textclassifier.TextLinks;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -24,18 +25,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     private TextView mText;
     private EditText mEdit;
     private Button mButton;
     private RequestQueue mQueue;
+    public ArrayList<Model> mListView;
+    public ViewAdapter mAdapter;
+    ListView mList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mText = findViewById(R.id.textV);
+//        mText = findViewById(R.id.textV);
         mEdit = findViewById(R.id.editT);
         mButton = findViewById(R.id.BttonS);
+        mList = findViewById(R.id.ListV);
 
         mQueue= Volley.newRequestQueue(this);
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -53,15 +60,19 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONArray jsonArray = response.getJSONArray("response");
+                            mListView = new ArrayList<>();
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject employee = jsonArray.getJSONObject(i);
-                                String firstName = employee.getString("description");
-                                String age = employee.getString("post_url");
-                                String mail = employee.getString("title");
-                                String mail1 = employee.getString("web_url");
+                                String description = employee.getString("description");
+                                String post_url = employee.getString("post_url");
+                                String title = employee.getString("title");
+                                String web_url = employee.getString("web_url");
 
-                                mText.append(firstName + ", " + age + ", " + mail +","+mail1+ "\n\n");
+                               // mText.append(firstName + ", " + age + ", " + mail +","+mail1+ "\n\n");
+                                mListView.add(new Model(description,post_url,title,web_url));
                             }
+                            mAdapter =new ViewAdapter(mListView);
+                            mList.setAdapter(mAdapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -73,5 +84,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         mQueue.add(request);
+        //ve len adapter
     }
     }

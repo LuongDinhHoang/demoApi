@@ -34,15 +34,23 @@
 
 
     </LinearLayout>
-    <TextView
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_weight="wrap_content"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:id="@+id/textV"-->
+<!--        android:visibility="gone"-->
+<!--        android:layout_height="wrap_content">-->
+
+<!--    </TextView>-->
+
+    <ListView
         android:layout_width="wrap_content"
         android:layout_weight="19"
         android:layout_marginTop="20dp"
-        android:id="@+id/textV"
+        android:id="@+id/ListV"
         android:layout_height="wrap_content">
 
-    </TextView>
-
-
+    </ListView>
 
 </LinearLayout>
