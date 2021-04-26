@@ -50,12 +50,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 jsonParse();
+                ElasticRestClient elasticRestClient =new ElasticRestClient();
+                elasticRestClient.getHttpRequest();
             }
         });
         }
     private void jsonParse() {
         //GET du lieu Json tu 1 link
-        String url = "http://172.36.68.21:9200/medicalsearch?key_search="+mEdit;
+        String url = "http://zing.vn"+mEdit;
+        //String url ="http://http://10.2.22.67:9090";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {//ket qua tra ve
                     @Override
