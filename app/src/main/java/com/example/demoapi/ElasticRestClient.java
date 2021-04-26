@@ -31,8 +31,6 @@ public class ElasticRestClient {
 
     public void getHttpRequest() {
         try {
-
-
             ElasticRestClient.get("get", null, new JsonHttpResponseHandler() { // instead of 'get' use twitter/tweet/1
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
