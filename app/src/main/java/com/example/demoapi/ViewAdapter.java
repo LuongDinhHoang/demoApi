@@ -8,7 +8,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class ViewAdapter extends BaseAdapter {
-    //adapter ve len listView
     public ViewAdapter(ArrayList<Model> mListView) {
         this.mListView = mListView;
     }

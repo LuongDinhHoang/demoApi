@@ -4,29 +4,29 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="20dp">
-<!--
-Hien thi du lieu len listView
--->
+
     <TextView
         android:id="@+id/description"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="1" />
 
     <TextView
         android:id="@+id/post_url"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="hello"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="1000" />
 
     <TextView
         android:id="@+id/web_url"
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="1000" />
 </LinearLayout>
