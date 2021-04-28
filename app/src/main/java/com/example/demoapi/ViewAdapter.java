@@ -37,7 +37,7 @@ public class ViewAdapter extends BaseAdapter {
         } else viewDisease = convertView;
         Model disease = (Model) getItem(position);
         ((TextView) viewDisease.findViewById(R.id.description)).setText(String.format("Description : %s ", disease.mDescription));
-        ((TextView) viewDisease.findViewById(R.id.header)).setText(String.format("header : %s", disease.mhHeader));
+        ((TextView) viewDisease.findViewById(R.id.header)).setText(String.format("Header : %s", disease.mhHeader));
         return viewDisease;
     }
 }

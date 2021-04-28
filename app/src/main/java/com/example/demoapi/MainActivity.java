@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue mQueue;
     public ArrayList<Model> mListView;
     public ViewAdapter mAdapter;
+    public JSONObject jsonObject,jsonObjectHits,jsonObjectRound,jsonObjectSource;
 
     ListView mList;
     @Override
@@ -68,13 +69,13 @@ public class MainActivity extends AppCompatActivity {
 
                     try {
                         //mText.setText(response.toString());
-                        JSONObject jsonObject=new JSONObject(response);
-                        JSONObject jsonObjectHits=jsonObject.getJSONObject("hits");
+                         jsonObject=new JSONObject(response);
+                         jsonObjectHits=jsonObject.getJSONObject("hits");
                         JSONArray jsonArrayHits=jsonObjectHits.getJSONArray("hits");
                         mListView = new ArrayList<>();
                         for (int i = 0; i < jsonArrayHits.length(); i++) {
-                            JSONObject jsonObjectRound=jsonArrayHits.getJSONObject(i);
-                            JSONObject jsonObjectSource=jsonObjectRound.getJSONObject("_source");
+                             jsonObjectRound=jsonArrayHits.getJSONObject(i);
+                             jsonObjectSource=jsonObjectRound.getJSONObject("_source");
                             String description = jsonObjectSource.getString("description");
                             String header = jsonObjectSource.getString("header");
 

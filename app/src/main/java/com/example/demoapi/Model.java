@@ -9,5 +9,5 @@ public class Model {
         this.mhHeader = mhHeader;
 
     }
-    
+
 }
