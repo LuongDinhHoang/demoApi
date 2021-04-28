@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue mQueue;
     public ArrayList<Model> mListView;
     public ViewAdapter mAdapter;
+    public JSONObject jsonObject,jsonObjectHits,jsonObjectRound,jsonObjectSource;
+
     ListView mList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,54 +61,32 @@ public class MainActivity extends AppCompatActivity {
         }
     private void jsonParse(String data) {
         //GET du lieu Json tu 1 link
-       // String url = "http://zing.vn"+mEdit;
         String url ="http://10.2.22.67:9090/craw_data/_search";
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(data);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         final String savedata= data;
-//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, jsonObject,
-//                new Response.Listener<JSONObject>() {//ket qua tra ve
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        try {
-//                            mText.setText(response.toString());
-//                            JSONArray jsonArray = response.getJSONArray("_source");
-//                            mListView = new ArrayList<>();
-//                            for (int i = 0; i < jsonArray.length(); i++) {
-//                                JSONObject employee = jsonArray.getJSONObject(i);
-//                                String description = employee.getString("_index");
-//                                String post_url = employee.getString("post_url");
-//                                String title = employee.getString("title");
-//                                String web_url = employee.getString("web_url");
-//
-//
-//                                mText.append(description);
-//                               // mListView.add(new Model(description,post_url,title,web_url));
-//                            }
-//                            //ve len adapter
-//                            mAdapter =new ViewAdapter(mListView);
-//                            mList.setAdapter(mAdapter);
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                },new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                error.printStackTrace();
-//            }
-
-  //      });
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                    mText.setText(response.toString());
 
-                //Log.i("VOLLEY", response);
+                    try {
+                         jsonObject=new JSONObject(response);
+                         jsonObjectHits=jsonObject.getJSONObject("hits");
+                        JSONArray jsonArrayHits=jsonObjectHits.getJSONArray("hits");
+                        mListView = new ArrayList<>();
+                        for (int i = 0; i < jsonArrayHits.length(); i++) {
+                             jsonObjectRound=jsonArrayHits.getJSONObject(i);
+                             jsonObjectSource=jsonObjectRound.getJSONObject("_source");
+                            String description = jsonObjectSource.getString("description");
+                            String header = jsonObjectSource.getString("header");
+
+                            mListView.add(new Model(description,header));
+
+                        }
+                         //ve len adapter
+                            mAdapter =new ViewAdapter(mListView);
+                            mList.setAdapter(mAdapter);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -126,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     return savedata == null ? null : savedata.getBytes("utf-8");
                 } catch (UnsupportedEncodingException uee) {
-                    //Log.v("Unsupported Encoding while trying to get the bytes", data);
                     return null;
                 }
             }
