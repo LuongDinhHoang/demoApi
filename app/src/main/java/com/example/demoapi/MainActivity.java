@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //anh xa
-        mText = findViewById(R.id.textV);
+        //mText = findViewById(R.id.textV);
         mEdit = findViewById(R.id.editT);
         mButton = findViewById(R.id.BttonS);
         mList = findViewById(R.id.ListV);
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //chuoi body truyen vao
                 String data = "{\"size\":10,\"sort\":[{\"_score\":\"desc\"}],\"query\":{\"bool\":{\"must\":{\"multi_match\":{\"query\":\"("+mEdit.getText().toString()+") OR (cúm)\",\"fields\":[\"header\",\"description\"]}}}},\"_source\":[\"header\",\"description\",\"web_url\",\"post_url\"]}";
                 jsonParse(data);
             }
@@ -91,9 +92,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
-
-                //Log.v("VOLLEY", error.toString());
+                error.printStackTrace();
             }
         }) {
             @Override
