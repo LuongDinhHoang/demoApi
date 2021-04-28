@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue mQueue;
     public ArrayList<Model> mListView;
     public ViewAdapter mAdapter;
-    public JSONObject jsonObject,jsonObjectHits,jsonObjectRound,jsonObjectSource;
 
     ListView mList;
     @Override
@@ -45,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //anh xa
-        //mText = findViewById(R.id.textV);
+        mText = findViewById(R.id.textV);
         mEdit = findViewById(R.id.editT);
         mButton = findViewById(R.id.BttonS);
         mList = findViewById(R.id.ListV);
@@ -54,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //chuoi body truyen vao
                 String data = "{\"size\":10,\"sort\":[{\"_score\":\"desc\"}],\"query\":{\"bool\":{\"must\":{\"multi_match\":{\"query\":\"("+mEdit.getText().toString()+") OR (cúm)\",\"fields\":[\"header\",\"description\"]}}}},\"_source\":[\"header\",\"description\",\"web_url\",\"post_url\"]}";
                 jsonParse(data);
             }
@@ -64,18 +62,19 @@ public class MainActivity extends AppCompatActivity {
         //GET du lieu Json tu 1 link
         String url ="http://10.2.22.67:9090/craw_data/_search";
         final String savedata= data;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
                     try {
-                         jsonObject=new JSONObject(response);
-                         jsonObjectHits=jsonObject.getJSONObject("hits");
+                        //mText.setText(response.toString());
+                        JSONObject jsonObject=new JSONObject(response);
+                        JSONObject jsonObjectHits=jsonObject.getJSONObject("hits");
                         JSONArray jsonArrayHits=jsonObjectHits.getJSONArray("hits");
                         mListView = new ArrayList<>();
                         for (int i = 0; i < jsonArrayHits.length(); i++) {
-                             jsonObjectRound=jsonArrayHits.getJSONObject(i);
-                             jsonObjectSource=jsonObjectRound.getJSONObject("_source");
+                            JSONObject jsonObjectRound=jsonArrayHits.getJSONObject(i);
+                            JSONObject jsonObjectSource=jsonObjectRound.getJSONObject("_source");
                             String description = jsonObjectSource.getString("description");
                             String header = jsonObjectSource.getString("header");
 
@@ -92,7 +91,9 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
+
+
+                //Log.v("VOLLEY", error.toString());
             }
         }) {
             @Override
